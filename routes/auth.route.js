@@ -10,10 +10,11 @@ authRouter.post("/sign-in", (req, res, next) => {
     if (err) return next(err);
 
     req.login(user, (err) => {
-      if (err)return next(err);
+      if (err) return next(err);
       return res.status(200).json({ success: true, data: [user] });
     });
   })(req, res, next);
 });
+
 authRouter.post("/logout", logout);
 export default authRouter;
