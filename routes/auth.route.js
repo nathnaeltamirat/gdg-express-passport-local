@@ -16,5 +16,6 @@ authRouter.post("/sign-in", (req, res, next) => {
   })(req, res, next);
 });
 
+
 authRouter.post("/logout", logout);
 export default authRouter;

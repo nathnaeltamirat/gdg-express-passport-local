@@ -43,7 +43,7 @@ export const signIn = async (req, email, password) => {
     error.statusCode = 404;
     throw error;
   }
-  
+
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
     const error = new Error("Invalid Credential");
@@ -51,16 +51,22 @@ export const signIn = async (req, email, password) => {
     throw error;
   }
   const userObj = user.toObject();
-  const {password: oPassword,...newUser} = userObj;
+  const { password: oPassword, ...newUser } = userObj;
   return newUser;
 };
 
 export const logout = async (req, res, next) => {
   try {
-    req.logout((err)=>{
-      if(err){throw err}
-      res.status(200).json({success:true,message: "Logout Successfully"})
-    })
+    req.logout((err) => {
+      if (err) {
+        throw err;
+      }
+      req.session.destroy((err) => {
+        if (err) throw err;
+        res.clearCookie("connect.sid");
+        res.status(200).json({ success: true, message: "Logout Successfully" });
+      });
+    });
   } catch (err) {
     next(err);
   }
